@@ -12,6 +12,13 @@ from distutils.core import setup, Extension
 version = "1.3.2"
 compiler_args = ['-g', '-DVERSION="%s"' % version]
 
+ext_module = Extension('OpenEXR',
+              ['OpenEXR.cpp'],
+              include_dirs=['/usr/include/OpenEXR', '/usr/local/include/OpenEXR', '/opt/local/include/OpenEXR'],
+              library_dirs=['/usr/local/lib', '/opt/local/lib'],
+              libraries=['Iex', 'Half', 'Imath', 'IlmImf', 'z'],
+              extra_compile_args=compiler_args)
+
 if sys.platform == 'darwin':
     compiler_args.append('-std=c++14')
     if 'MACOSX_DEPLOYMENT_TARGET' not in os.environ:
@@ -21,7 +28,13 @@ if sys.platform == 'darwin':
         if python_target < '10.9' and current_system >= '10.9':
             os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.9'
 
-            
+    ext_module = Extension('OpenEXR',
+              ['OpenEXR.cpp'],
+              include_dirs=['/opt/homebrew/include/OpenEXR', '/opt/homebrew/include/Imath'],
+              library_dirs=['/opt/homebrew/lib'],
+              libraries=['Iex', 'Imath', 'OpenEXR', 'z'],
+              extra_compile_args=compiler_args)
+
 setup(name='OpenEXR',
   author = 'James Bowman',
   author_email = 'jamesb@excamera.com',
@@ -29,13 +42,6 @@ setup(name='OpenEXR',
   description = "Python bindings for ILM's OpenEXR image file format",
   long_description = "Python bindings for ILM's OpenEXR image file format",
   version=version,
-  ext_modules=[ 
-    Extension('OpenEXR',
-              ['OpenEXR.cpp'],
-              include_dirs=['/usr/include/OpenEXR', '/usr/local/include/OpenEXR', '/opt/local/include/OpenEXR'],
-              library_dirs=['/usr/local/lib', '/opt/local/lib'],
-              libraries=['Iex', 'Half', 'Imath', 'IlmImf', 'z'],
-              extra_compile_args=compiler_args)
-  ],
+  ext_modules=[ext_module],
   py_modules=['Imath'],
 )

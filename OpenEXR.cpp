@@ -6,6 +6,10 @@ typedef int Py_ssize_t;
 #define PY_SSIZE_T_MIN INT_MIN
 #endif
 
+#ifdef __APPLE__
+    #define Int64 uint64_t
+#endif
+
 #if PY_MAJOR_VERSION >= 3
   #define MOD_ERROR_VAL NULL
   #define MOD_SUCCESS_VAL(val) val
@@ -63,6 +67,10 @@ typedef int Py_ssize_t;
 #include <ImfVecAttribute.h>
 #include <ImfVersion.h>
 
+#ifdef __APPLE__
+    #include <ImfFrameBuffer.h>
+#endif
+
 #include <OpenEXRConfig.h>
 
 #if OPENEXR_VERSION_MAJOR>=2
@@ -87,8 +95,11 @@ typedef int Py_ssize_t;
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
-#include <iostream>
 #include <vector>
+
+#ifdef __APPLE__
+    #include <fstream>
+#endif 
 
 using namespace std;
 using namespace Imf;
